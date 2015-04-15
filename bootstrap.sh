@@ -3,7 +3,11 @@
 
 # Either galaxy-dist (stable) or galaxy-central
 # 
-galaxy_branch='galaxy-dist'
+galaxy_folder='galaxy'
+
+galaxy_branch='dev'
+
+install_galaxy=true
 
 # Replace with your email address
 # Use this email address when registering as a user in the galaxy interface
@@ -31,7 +35,8 @@ sudo apt-get update
 # Galaxy base
 sudo apt-get install -y build-essential autoconf automake git-core mercurial subversion pkg-config libc6-dev
 
-
+# Optional install if wanting to use this VM to test peptideshaker
+#sudo apt-get install -y openjdk-7-jre
 
 if [[ ! -f /usr/local/bin/virtualenv ]]; then
 	sudo apt-get install -y python-pip
@@ -49,29 +54,29 @@ if [ ! -d /home/vagrant/galaxy_env ]; then
 	su vagrant -c "echo '. ~/galaxy_env/bin/activate' >> ~/.bashrc"
 fi
 
-if [ ! -d /home/vagrant/$galaxy_branch ]; then
-	if [ -d /vagrant/$galaxy_branch ]; then
-		su vagrant -c "cp -r /vagrant/$galaxy_branch ./"
-	else
-		su vagrant -c "hg clone https://bitbucket.org/galaxy/$galaxy_branch#stable"
-		su vagrant -c "cd $galaxy_branch;hg update stable"
+if [[ "$install_galaxy" == true ]]; then
+
+	if [ ! -d /home/vagrant/$galaxy_folder ]; then
+		su vagrant -c "git clone https://github.com/galaxyproject/galaxy.git $galaxy_folder"
+		# su vagrant -c "hg clone https://bitbucket.org/galaxy/$galaxy_folder#stable"
+		su vagrant -c "cd $galaxy_folder;git checkout $galaxy_branch"
 	fi
-fi
 
-if [ ! -f /home/vagrant/$galaxy_branch/config/galaxy.ini ]; then
-	cd /home/vagrant/$galaxy_branch/config/
-	su vagrant -c "cp galaxy.ini.sample galaxy.ini"
-	sed -i.bak s/'#host = 127.0.0.1'/'host = 0.0.0.0'/ galaxy.ini
-	sed -i.bak s%'#tool_dependency_dir = None'%'tool_dependency_dir = ../tool_dependencies'% galaxy.ini
-	sed -i.bak s%'#tool_config_file = tool_conf.xml,shed_tool_conf.xml'%'tool_config_file = tool_conf.xml,shed_tool_conf.xml'% galaxy.ini
-	admin_users_string="admin_users = "$admin_email
-	sed -i.bak "s%#admin_users = None%$admin_users_string%" galaxy.ini
-fi
+	if [ ! -f /home/vagrant/$galaxy_folder/config/galaxy.ini ]; then
+		cd /home/vagrant/$galaxy_folder/config/
+		su vagrant -c "cp galaxy.ini.sample galaxy.ini"
+		sed -i.bak s/'#host = 127.0.0.1'/'host = 0.0.0.0'/ galaxy.ini
+		sed -i.bak s%'#tool_dependency_dir = None'%'tool_dependency_dir = ../tool_dependencies'% galaxy.ini
+		sed -i.bak s%'#tool_config_file = tool_conf.xml,shed_tool_conf.xml'%'tool_config_file = tool_conf.xml,shed_tool_conf.xml'% galaxy.ini
+		admin_users_string="admin_users = "$admin_email
+		sed -i.bak "s%#admin_users = None%$admin_users_string%" galaxy.ini
+	fi
 
-if [[ ! -f /home/vagrant/$galaxy_branch/config/job_conf.xml ]]; then
-	cp /vagrant/job_conf.xml /home/vagrant/$galaxy_branch/config/job_conf.xml
-	sudo chown vagrant ~/galaxy-dist/config/job_conf.xml
-	sudo chgrp vagrant ~/galaxy-dist/config/job_conf.xml	
-fi
+	if [[ ! -f /home/vagrant/$galaxy_folder/config/job_conf.xml ]]; then
+		cp /vagrant/job_conf.xml /home/vagrant/$galaxy_folder/config/job_conf.xml
+		sudo chown vagrant /home/vagrant/$galaxy_folder/config/job_conf.xml
+		sudo chgrp vagrant /home/vagrant/$galaxy_folder/config/job_conf.xml	
+	fi
 
+fi
 

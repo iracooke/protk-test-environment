@@ -12,11 +12,18 @@ Clone the repo and startup the VM
 Check out the protk tools
 
 ```bash
-	git clone git@github.com:iracooke/protk-galaxytools.git
+	git clone https://github.com/iracooke/protk-galaxytools.git
 ```
 
-Run a test using planemo
+Run a test using planemo (with docker for protk dependencies)
 
 ```bash
-	planemo test --install_galaxy --job_config_file job_conf.xml protk-galaxytools/xtandem/
+	pip install planemo
+	planemo test --install_galaxy --job_config_file /vagrant/job_conf.xml protk-galaxytools/xtandem/
+```
+
+Or if you installed galaxy
+
+```bash
+	planemo test --galaxy_root /home/vagrant/galaxy-dist --job_config_file /vagrant/job_conf.xml protk-galaxytools/xtandem/	
 ```
