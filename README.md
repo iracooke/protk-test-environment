@@ -15,15 +15,28 @@ Check out the protk tools
 	git clone https://github.com/iracooke/protk-galaxytools.git
 ```
 
-Run a test using planemo (with docker for protk dependencies)
+Install planemo
 
 ```bash
 	pip install planemo
+	cp /vagrant/.planemo.yml ~/
+```
+
+Run a test using planemo (with docker for protk dependencies)
+
+```bash
 	planemo test --install_galaxy --job_config_file /vagrant/job_conf.xml protk-galaxytools/xtandem/
 ```
 
 Or if you installed galaxy
 
 ```bash
-	planemo test --galaxy_root /home/vagrant/galaxy-dist --job_config_file /vagrant/job_conf.xml protk-galaxytools/xtandem/	
+	planemo test --job_config_file /vagrant/job_conf.xml protk-galaxytools/xtandem/	
+```
+
+And if you want to test tools with dependencies. First install them manually. Then source their env.sh files.
+For example, for peptideshaker
+
+```bash
+	
 ```

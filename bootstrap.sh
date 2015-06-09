@@ -32,8 +32,12 @@ sudo echo "export _JAVA_OPTIONS='-Xmx1500M';" >> /home/vagrant/.bashrc
 
 sudo apt-get update
 
+ 
+
 # Galaxy base
-sudo apt-get install -y build-essential autoconf automake git-core mercurial subversion pkg-config libc6-dev
+sudo apt-get install -y build-essential autoconf automake gfortran git-core \
+mercurial subversion pkg-config libc6-dev cmake libatlas-base-dev libblas-dev liblapack-dev \
+subversion python-dev openjdk-7-jre openjdk-7-jre-headless
 
 # Optional install if wanting to use this VM to test peptideshaker
 #sudo apt-get install -y openjdk-7-jre
@@ -70,6 +74,7 @@ if [[ "$install_galaxy" == true ]]; then
 		sed -i.bak s%'#tool_config_file = tool_conf.xml,shed_tool_conf.xml'%'tool_config_file = tool_conf.xml,shed_tool_conf.xml'% galaxy.ini
 		admin_users_string="admin_users = "$admin_email
 		sed -i.bak "s%#admin_users = None%$admin_users_string%" galaxy.ini
+		cp /vagrant/tool_sheds_conf.xml .
 	fi
 
 	if [[ ! -f /home/vagrant/$galaxy_folder/config/job_conf.xml ]]; then
