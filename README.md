@@ -38,5 +38,7 @@ And if you want to test tools with dependencies. First install them manually. Th
 For example, for peptideshaker
 
 ```bash
-	
+	source ~/tool_dependencies/peptide_shaker/0.40/iracooke/package_peptideshaker_0_40/ad506cfe07a8/env.sh 
+	source ~/tool_dependencies/searchgui/1.28/iracooke/package_searchgui_1_28/f50096190d0d/env.sh	
 ```
+

@@ -5,7 +5,7 @@
 # 
 galaxy_folder='galaxy'
 
-galaxy_branch='dev'
+galaxy_branch='master'
 
 install_galaxy=true
 
@@ -61,8 +61,10 @@ fi
 if [[ "$install_galaxy" == true ]]; then
 
 	if [ ! -d /home/vagrant/$galaxy_folder ]; then
-		su vagrant -c "git clone https://github.com/galaxyproject/galaxy.git $galaxy_folder"
+		# su vagrant -c "git clone https://github.com/galaxyproject/galaxy.git $galaxy_folder"
+		su vagrant -c "git clone https://github.com/iracooke/galaxy.git $galaxy_folder"
 		# su vagrant -c "hg clone https://bitbucket.org/galaxy/$galaxy_folder#stable"
+		su vagrant -c "cd $galaxy_folder;git fetch"
 		su vagrant -c "cd $galaxy_folder;git checkout $galaxy_branch"
 	fi
 
